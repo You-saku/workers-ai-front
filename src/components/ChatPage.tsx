@@ -17,7 +17,6 @@ export default function ChatPage() {
     const [response, setResponse] = useState('')
 
     const chat = async () => {
-        console.log(input)
 
         const res = await fetch(process.env.REACT_APP_CLOUDFLAWE_WORKERS_AI_API || "", {
             method: 'POST',
@@ -30,8 +29,6 @@ export default function ChatPage() {
         }).then(res => res.json())
         .then(data => data.response)
         .catch(err => console.log(err))
-
-        console.log(res)
 
         setResponse(res)
         setInput('')
