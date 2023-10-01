@@ -1,4 +1,4 @@
-# react-app-cloudflare-workers-ai
+# react-sample-cloudflare-workers-ai
 ## requirements
 * node 18.16.1
 
