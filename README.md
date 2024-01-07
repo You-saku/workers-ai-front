@@ -1,4 +1,4 @@
-# react-sample-cloudflare-workers-ai
+# workers-ai-front
 ## requirements
 * node 18.16.1
 
