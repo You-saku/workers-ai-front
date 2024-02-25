@@ -5,23 +5,22 @@ import {
     FormControl,
     FormErrorMessage,
     FormLabel,
-    FormHelperText, 
+    FormHelperText,
+    Flex,
     Input,
     Text,
-    VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ZodError, z } from 'zod';
+import { ZodError } from 'zod';
+import { ChatSchema } from '../schemas/chatSchema';
 import { cloudflareWorkersAI } from '../hooks/cloudflare-workers-ai';
 
 export default function Chat() {
     const [input, setInput] = useState('')
     const [validated, setValidated] = useState('')
     const [isValid, setIsValid] = useState(false)
-    const [errorMessage, setErrMessage] = useState<string|null>(null)
+    const [validateErrorMessage, setValidateErrMessage] = useState<string|null>(null)
     const [response, setResponse] = useState('')
-
-    const ChatSchema = z.string().min(1, { message: 'Please input more than 1 character.' });
 
     const chat = async () => {
         setIsValid(false)
@@ -31,12 +30,11 @@ export default function Chat() {
             setValidated(validated)
         } catch (err: any) {
             if (err instanceof ZodError) {
-                setErrMessage(err.format()._errors[0])
+                setValidateErrMessage(err.format()._errors[0])
                 setIsValid(true)
                 return
             }
         }
-
         const res = await cloudflareWorkersAI(validated);
 
         setResponse(res)
@@ -45,21 +43,19 @@ export default function Chat() {
 
     return (
       <div>
-        <Center py={6}>
-            <VStack spacing={6}>
-            <Text fontSize='3xl'>Chat with Cloudflare Workers AI</Text>
-            <FormControl isInvalid={isValid}>
-                <FormLabel>Input</FormLabel>
-                <Input type='text' value={input} onChange={(e) => setInput(e.target.value)}/>
-                {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
-                <FormHelperText>Please type what you want to ask(Only English)</FormHelperText>
-            </FormControl>
-            <Button colorScheme='orange' size='md' type="submit" onClick={chat}>Submit</Button>
-            <FormControl isReadOnly={true}>
-                <FormLabel>Output</FormLabel>
-            </FormControl>
-            <Box maxW="500px">{response}</Box>
-            </VStack>
+        <Center>
+            <Flex direction='column' align='center' justify='center'>
+                <Text fontSize='3xl'>Chat with Cloudflare Workers AI</Text>
+                <FormControl isInvalid={isValid}>
+                    <FormLabel>Input</FormLabel>
+                    <Input type='text' value={input} onChange={(e) => setInput(e.target.value)}/>
+                    {validateErrorMessage && <FormErrorMessage>{validateErrorMessage}</FormErrorMessage>}
+                    <FormHelperText>Please type what you want to ask(Only English)</FormHelperText>
+                </FormControl>
+                <Button colorScheme='orange' size='md' type="submit" m={'1rem'} onClick={chat}>Submit</Button>
+                <Text>Output</Text>
+                {response && <Box maxW={'24rem'} p={'0.5rem'} border={'1px'}>{response}</Box>}
+            </Flex>
         </Center>
       </div>
     )
