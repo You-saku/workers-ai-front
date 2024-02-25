@@ -1,15 +1,15 @@
-export const cloudflareWorkersAI = async (input: string) => {
-    const res = await fetch(process.env.REACT_APP_CLOUDFLARE_WORKERS_AI_API || "", {
+export const cloudflareWorkersAI = async (question: string) => {
+    const answer = await fetch(process.env.REACT_APP_CLOUDFLARE_WORKERS_AI_API || "", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-                prompt: input
+                prompt: question
         })
-    }).then(res => res.json())
+    }).then(response => response.json())
     .then(data => data.response)
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
 
-    return res
+    return answer
 }

@@ -21,9 +21,9 @@ export default function Chat() {
     const [response, setResponse] = useState('')
 
     const chat = async () => {
-        let validatedInput = "";
+        let questionText = "";
         try {
-            validatedInput = ChatSchema.parse(input);
+            questionText = ChatSchema.parse(input);
             setIsInvalid(false);
         } catch (err: any) {
             if (err instanceof ZodError) {
@@ -32,7 +32,7 @@ export default function Chat() {
                 return
             }
         }
-        const res = await cloudflareWorkersAI(validatedInput);
+        const res = await cloudflareWorkersAI(questionText);
 
         setResponse(res)
         setInput('')
