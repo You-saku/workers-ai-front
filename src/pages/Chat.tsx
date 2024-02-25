@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ZodError, z } from 'zod';
-import  { cloudflareWorkersAI } from '../hooks/cloudflare-workers-ai';
+import { cloudflareWorkersAI } from '../hooks/cloudflare-workers-ai';
 
 export default function Chat() {
     const [input, setInput] = useState('')
