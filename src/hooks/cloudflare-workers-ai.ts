@@ -1,5 +1,5 @@
 export const cloudflareWorkersAI = async (input: string) => {
-    const res = await fetch(process.env.REACT_APP_CLOUDFLAWE_WORKERS_AI_API || "", {
+    const res = await fetch(process.env.REACT_APP_CLOUDFLARE_WORKERS_AI_API || "", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
