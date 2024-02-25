@@ -1,10 +1,10 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import ChatPage from './components/ChatPage';
+import Chat from './pages/Chat';
 
 function App() {
   return (
     <ChakraProvider>
-      <ChatPage />
+      <Chat />
     </ChakraProvider>
   );
 }

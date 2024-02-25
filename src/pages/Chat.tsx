@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ZodError, z } from 'zod';
+import  { cloudflareWorkersAI } from '../hooks/cloudflare-workers-ai';
 
-
-export default function ChatPage() {
+export default function Chat() {
     const [input, setInput] = useState('')
     const [validated, setValidated] = useState('')
     const [isValid, setIsValid] = useState(false)
@@ -37,17 +37,7 @@ export default function ChatPage() {
             }
         }
 
-        const res = await fetch(process.env.REACT_APP_CLOUDFLAWE_WORKERS_AI_API || "", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                    prompt: validated
-            })
-        }).then(res => res.json())
-        .then(data => data.response)
-        .catch(err => console.log(err))
+        const res = await cloudflareWorkersAI(validated);
 
         setResponse(res)
         setInput('')
