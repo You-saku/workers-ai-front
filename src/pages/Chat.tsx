@@ -47,8 +47,9 @@ export default function Chat() {
                                     type='text'
                                     value={question}
                                     placeholder='What Cloudflare Workers AI ？'
-                                    {...register('question')}
-                                    onChange={(e) => setQuestion(e.target.value)}
+                                    {...register('question', {
+                                        onChange: (e) => setQuestion(e.target.value)
+                                    })}
                                 />
                                 <Button colorScheme='orange' type="submit" marginLeft={'0.5rem'}>
                                     <Text size={'sm'} p={'1rem'}>Send</Text>
