@@ -1,20 +1,21 @@
-const errorHandler = async ({ next }) => {
+const Credentials = {
+    USERNAME: "user",
+    PASSWORD: "password",
+  };
+
+  const errorHandler = async ({ next }) => {
     try {
       return await next();
     } catch (err) {
       return new Response(`${err.message}\n${err.stack}`, { status: 500 });
     }
   };
-  
-  const guardByBasicAuth = async ({ request, next, env }) => {
-    if (env.BASIC_AUTH !== 'true') {
-      return await next();
-    }
-  
+
+  const guardByBasicAuth = async ({ next, request, }) => {
     // Check header
-    if (!request.headers.has('Authorization')) {
+    if (!request.headers.has("Authorization")) {
       return new Response(
-        'You need to login.',
+        "You need to login.",
         {
           status: 401,
           headers: {
@@ -22,41 +23,41 @@ const errorHandler = async ({ next }) => {
             'WWW-Authenticate': 'Basic realm="Input username and password"',
           },
         });
-    }
+    };
     // Decode header value
-    const [scheme, encoded] = request.headers.get('Authorization').split(' ');
+    const [scheme, encoded] = request.headers.get("Authorization").split(' ');
     if (!encoded || scheme !== 'Basic') {
       return new Response(
-        'Malformed authorization header.',
+        "Malformed authorization header.",
         {
           status: 400,
-        },
+        }
       );
     }
     const buffer = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
     const decoded = new TextDecoder().decode(buffer).normalize();
-    const index = decoded.indexOf(':');
-    // eslint-disable-next-line no-control-regex
+    const index = decoded.indexOf(":");
     if (index === -1 || /[\0-\x1F\x7F]/.test(decoded)) {
       return new Response(
-        'Invalid authorization value.',
+        "Invalid authorization value.",
         {
           status: 400,
-        },
+        }
       );
     }
-  
+
+    // Verify credentials
     const username = decoded.substring(0, index);
     const password = decoded.substring(index + 1);
-    if (username !== env.BASIC_USERNAME || password !== env.BASIC_PASSWORD) {
+    if (username !== Credentials.USERNAME || password !== Credentials.PASSWORD) {
       return new Response(
-        'Invalid username or password.',
+        "Invalid username or password.",
         {
           status: 401,
-        },
+        }
       );
     }
     return await next();
   };
-  
+
   export const onRequest = [errorHandler, guardByBasicAuth];
